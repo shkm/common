@@ -1,12 +1,12 @@
-# pr-common #
+# Common #
 
-A package of common controllers, concerns & authentication. Things that will be used in every app we create. So far, Blimpon and Plug in SEO v3 use it.
+A package of common controllers, concerns & authentication for the [React/Rails Shopify app](https://github.com/pemberton-rank/react-shopify-app). Used in production by the 100k user app: [Plug in SEO](https://apps.shopify.com/plug-in-seo).
 
 ### How to use ###
 
 Reference the repo and a specific version in your Gemfile like this:
 
-``` gem 'pr-common', git: 'git@bitbucket.org:pembertonrank/common.git', tag: 'v0.0.5' ```
+``` gem 'pr-common', git: 'https://github.com/pemberton-rank/common.git', tag: 'v0.0.5' ```
 
 #### Local dev ####
 If you're developing a project X, changing pr-common and want to use your local version:

@@ -7,10 +7,11 @@ require 'pr/common/version'
 Gem::Specification.new do |s|
   s.name        = "pr-common"
   s.version     = PR::Common::VERSION
+  s.licenses    = ['MIT']
   s.authors     = ["Pemberton Rank Ltd"]
   s.email       = ["hello@pembertonrank.com"]
-  s.homepage    = "https://www.pluginseo.com"
-  s.summary     = "Common components of Pemberton Rank software"
+  s.homepage    = "https://www.pembertonrank.com"
+  s.summary     = "Common components for the React/Rails Shopify app"
 
   s.files = Dir["{app,config,db,lib}/**/*", "Rakefile", "README.rdoc"]
   s.test_files = Dir["test/**/*"]

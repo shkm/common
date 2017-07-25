@@ -7,4 +7,5 @@ Rails.application.routes.draw do
   resources :passwords, only: [:create, :update]
 
   get 'user_admin/search'
+  post 'user_admin/refunds', to: 'user_admin#make_refund'
 end

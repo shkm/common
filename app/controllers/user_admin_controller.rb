@@ -28,7 +28,7 @@ class UserAdminController < ApiBaseController
     end
 
     user = User.find(params[:user_id])
-    refund = user.make_refund(reason: params[:reason], amount: params[:amount])
+    refund = user.make_refund(reason: params[:reason], amount: params[:amount], test: params[:test])
 
     render json: refund.to_json
   end

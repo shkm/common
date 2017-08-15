@@ -21,6 +21,18 @@ class UserAdminController < ApiBaseController
     render json: results.to_json
   end
 
+  def make_refund
+    if !current_user.admin?
+      render json: {error: 'auth error'}, status: 403
+      return false
+    end
+
+    user = User.find(params[:user_id])
+    refund = user.make_refund(reason: params[:reason], amount: params[:amount], test: params[:test])
+
+    render json: refund.to_json
+  end
+
   private
   def search_params
     params.require(:q)

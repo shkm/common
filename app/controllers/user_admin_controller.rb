@@ -7,7 +7,7 @@ class UserAdminController < ApiBaseController
 
     results =
       User
-        .select(:id, :email, :website, 's.shopify_domain', PR::Common.config.premium_column_name, 'fc.first_charge_date')
+        .select(:id, :email, :website, 's.shopify_domain', :active_charge, 'fc.first_charge_date')
         .joins(ActiveRecord::Base.send(:sanitize_sql_array, ["
           LEFT JOIN shops s
           ON s.id = users.shop_id

@@ -8,15 +8,14 @@ class UserAdminController < ApiBaseController
     results =
       User
         .select(:id, :email, :website, 's.shopify_domain', :active_charge, 'fc.first_charge_date')
-        .joins(ActiveRecord::Base.send(:sanitize_sql_array, ["
+        .joins("
           LEFT JOIN shops s
-          ON s.id = users.shop_id
-          AND s.shopify_domain ILIKE ?", "%#{params[:q]}%"]))
+          ON s.id = users.shop_id")
         .joins('LEFT JOIN (select user_id, min(date_created) as first_charge_date
                             from application_charges ac
                             group by user_id) AS fc
                 ON fc.user_id = users.id')
-        .where('users.email ILIKE ? OR users.website ILIKE ? OR s.id IS NOT NULL', '%' + params[:q] + '%', '%' + params[:q] + '%')
+        .where('users.email ILIKE ? OR users.website ILIKE ? OR s.shopify_domain ILIKE ?', "%#{params[:q]}%", "%#{params[:q]}%", "%#{params[:q]}%")
 
     render json: results.to_json
   end

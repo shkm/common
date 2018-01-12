@@ -5,13 +5,24 @@ module ActiveResource
   class RateLimitExceededError < ClientError # :nodoc:
   end
 
-  class Connection
+  class Connection 
+    @@mutex = Mutex.new
 
-    RATE_LIMIT_SLEEP_SECONDS = 20 # number of seconds to sleep (by sleeping 20 you reset the clock to get 40 fresh burst calls with the default 2 calls/sec)
-    RATE_LIMIT_BUFFER = 5 # you don't want to drain the remaining count to 0 in case you need high priority calls
-
-    cattr_accessor :rate_limit_timer, :current_rate_limit_call_count, :total_rate_limit_calls
-
+    RATE_LIMIT_SLEEP_SECONDS = ENV["RATE_LIMIT_SLEEP_SECONDS"] || 20 # number of seconds to sleep (by sleeping 20 you reset the clock to get 40 fresh burst calls with the default 2 calls/sec)
+    RATE_LIMIT_BUFFER = ENV["RATE_LIMIT_SLEEP_SECONDS"] || 5 # you don't want to drain the remaining count to 0 in case you need high priority calls
+    
+    def self.rate_limit_timer
+      @@mutex.synchronize {
+        @rate_limit_timer
+      }
+    end
+    
+    def self.rate_limit_timer=(value)
+      @@mutex.synchronize {
+        @rate_limit_timer = value
+      }
+    end
+    
     private
 
     # https://github.com/rails/activeresource/blob/82eb29ab023b3105b29bce31c9a00a3b9a9653aa/lib/active_resource/connection.rb#L117
@@ -43,23 +54,21 @@ module ActiveResource
       end
     end
 
-    # Note this uses class variables and is not threadsafe or resilient to multiple processes communicating with the API simultaneously
     def handle_rate_limits(response)
       return unless response['x-shopify-shop-api-call-limit']
       # Record the current limits
-      self.current_rate_limit_call_count, self.total_rate_limit_calls = response['x-shopify-shop-api-call-limit'].split('/')
       # Start a timer from when we last learned about the current limits
-      self.rate_limit_timer = Time.now
+      self.class.rate_limit_timer = Time.now
       # Print some feedback for debugging
-      Rails.logger.debug "[Rate limit: #{self.current_rate_limit_call_count || "??"}/#{self.total_rate_limit_calls || "??"}]" if ENV["DEBUG_SHOPIFY_RATE_LIMITS"]
+      Rails.logger.debug "[Rate limit: #{current_rate_limit_call_count(response) || "??"}/#{total_rate_limit_calls(response) || "??"}]" if ENV["DEBUG_SHOPIFY_RATE_LIMITS"]
       # Sleep if we need to sleep
-      rate_limit_sleep if rate_limit_need_sleep?
+      rate_limit_sleep if rate_limit_need_sleep?(response)
     end
 
     def rate_limit_elapsed_seconds
-      return 0 if self.rate_limit_timer.nil?
+      return 0 if self.class.rate_limit_timer.nil?
 
-      Time.now.to_i - self.rate_limit_timer.to_i
+      Time.now.to_i - self.class.rate_limit_timer.to_i
     end
 
     def rate_limit_sleep
@@ -67,14 +76,22 @@ module ActiveResource
       return if sleep_seconds < 0
       Rails.logger.debug "[Rate limit sleeping: #{sleep_seconds} seconds]" if ENV["DEBUG_SHOPIFY_RATE_LIMITS"]
       Kernel.sleep(sleep_seconds)
-      self.rate_limit_timer = nil
+      self.class.rate_limit_timer = nil
     end
 
-    def rate_limit_need_sleep?
-      return false if self.total_rate_limit_calls.nil? || self.current_rate_limit_call_count.nil?
-      return false if self.total_rate_limit_calls.to_i - self.current_rate_limit_call_count.to_i > RATE_LIMIT_BUFFER
+    def rate_limit_need_sleep?(response)
+      return false if total_rate_limit_calls(response).nil? || current_rate_limit_call_count(response).nil?
+      return false if total_rate_limit_calls(response).to_i - current_rate_limit_call_count(response).to_i > RATE_LIMIT_BUFFER
       return false if rate_limit_elapsed_seconds > RATE_LIMIT_SLEEP_SECONDS
       true
+    end
+    
+    def current_rate_limit_call_count(response)
+      response['x-shopify-shop-api-call-limit'].split('/').first
+    end
+    
+    def total_rate_limit_calls(response)
+      response['x-shopify-shop-api-call-limit'].split('/').last
     end
   end
 end

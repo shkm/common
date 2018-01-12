@@ -9,7 +9,7 @@ module ActiveResource
     @@mutex = Mutex.new
 
     RATE_LIMIT_SLEEP_SECONDS = ENV["RATE_LIMIT_SLEEP_SECONDS"] || 20 # number of seconds to sleep (by sleeping 20 you reset the clock to get 40 fresh burst calls with the default 2 calls/sec)
-    RATE_LIMIT_BUFFER = ENV["RATE_LIMIT_SLEEP_SECONDS"] || 5 # you don't want to drain the remaining count to 0 in case you need high priority calls
+    RATE_LIMIT_BUFFER = ENV["RATE_LIMIT_SLEEP_SECONDS"] || 10 # you don't want to drain the remaining count to 0 in case you need high priority calls
     
     def self.rate_limit_timer
       @@mutex.synchronize {
@@ -38,7 +38,7 @@ module ActiveResource
       handle_rate_limits(result)
       handle_response(result)
     rescue RateLimitExceededError => e
-      Rails.logger.warning "[Rate limit exceeded]" if ENV["DEBUG_SHOPIFY_RATE_LIMITS"]
+      Rails.logger.warn "[Rate limit exceeded]" if ENV["DEBUG_SHOPIFY_RATE_LIMITS"]
       rate_limit_sleep
       retry
     rescue Timeout::Error => e

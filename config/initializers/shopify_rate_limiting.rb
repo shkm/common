@@ -38,7 +38,7 @@ module ActiveResource
       handle_rate_limits(result)
       handle_response(result)
     rescue RateLimitExceededError => e
-      Rails.logger.debug "[Rate limit exceeded]" if ENV["DEBUG_SHOPIFY_RATE_LIMITS"]
+      Rails.logger.warning "[Rate limit exceeded]" if ENV["DEBUG_SHOPIFY_RATE_LIMITS"]
       rate_limit_sleep
       retry
     rescue Timeout::Error => e

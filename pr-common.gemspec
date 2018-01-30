@@ -19,6 +19,7 @@ Gem::Specification.new do |s|
   # s.add_dependency 'rails', '~> 4.2.3'
   s.add_dependency 'rails'#, '~> 4.2', '> 4.2.3'
   s.add_dependency 'active_model_serializers'
+  s.add_dependency 'nokogiri', '>= 1.8.2'
 
   s.add_development_dependency 'sqlite3'
   s.add_development_dependency 'rspec-rails'

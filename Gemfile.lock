@@ -1,8 +1,9 @@
 PATH
   remote: .
   specs:
-    pr-common (0.1.4)
+    pr-common (0.1.7)
       active_model_serializers
+      nokogiri (>= 1.8.2)
       rails
 
 GEM
@@ -84,11 +85,9 @@ GEM
     mime-types-data (3.2016.0521)
     mini_portile2 (2.1.0)
     minitest (5.9.0)
-    nokogiri (1.6.8)
-      mini_portile2 (~> 2.1.0)
-      pkg-config (~> 1.1.7)
+    nokogiri (1.8.2)
+      mini_portile2 (~> 2.3.0)
     orm_adapter (0.5.0)
-    pkg-config (1.1.7)
     pry (0.10.3)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
@@ -112,9 +111,9 @@ GEM
       sprockets-rails
     rails-deprecated_sanitizer (1.0.3)
       activesupport (>= 4.2.0.alpha)
-    rails-dom-testing (1.0.7)
-      activesupport (>= 4.2.0.beta, < 5.0)
-      nokogiri (~> 1.6.0)
+    rails-dom-testing (1.0.9)
+      activesupport (>= 4.2.0, < 5.0)
+      nokogiri (~> 1.6)
       rails-deprecated_sanitizer (>= 1.0.1)
     rails-html-sanitizer (1.0.3)
       loofah (~> 2.0)
@@ -171,4 +170,4 @@ DEPENDENCIES
   sqlite3
 
 BUNDLED WITH
-   1.12.5
+   1.16.1

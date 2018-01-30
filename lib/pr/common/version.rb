@@ -1,5 +1,5 @@
 module PR
   module Common
-    VERSION = '0.1.7'
+    VERSION = '0.1.11'
   end
 end

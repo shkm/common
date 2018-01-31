@@ -2,7 +2,8 @@ PATH
   remote: .
   specs:
     pr-common (0.1.11)
-      active_model_serializers (= 0.10.5)
+      active_model_serializers
+      nokogiri (>= 1.8.2)
       rails
 
 GEM

@@ -2,6 +2,12 @@ source 'https://rubygems.org'
 
 gemspec
 
-# To use a debugger
-gem 'pry-byebug', group: [:development, :test]
+gem 'activeresource'
+
+group :development, :test do
+  gem 'sqlite3'
+  gem 'factory_bot_rails'
+  gem 'pry-byebug', group: [:development, :test]
+end
+
 gem 'devise'

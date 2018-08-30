@@ -1,0 +1,4 @@
+spec/dummy/log/*
+spec/dummy/db/*.sqlite3
+
+.byebug_history

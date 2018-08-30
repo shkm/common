@@ -8,4 +8,6 @@ Rails.application.routes.draw do
 
   get 'user_admin/search'
   post 'user_admin/refunds', to: 'user_admin#make_refund'
+
+  post 'shops/callback'
 end

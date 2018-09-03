@@ -3,6 +3,7 @@ source 'https://rubygems.org'
 gemspec
 
 gem 'activeresource'
+gem 'shopify_app', '~> 7.2.0'
 
 group :development, :test do
   gem 'sqlite3'

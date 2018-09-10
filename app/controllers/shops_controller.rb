@@ -1,6 +1,6 @@
 class ShopsController < ApplicationController
   def callback
-    Shop.find_by(shopify_domain: params[:domain]).update(shop_params)
+    Shop.find_by(shopify_domain: params[:myshopify_domain]).update(shop_params)
   end
 
   private

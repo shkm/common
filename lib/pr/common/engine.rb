@@ -1,3 +1,4 @@
+require 'rack-affiliates'
 module PR
   module Common
     class Engine < ::Rails::Engine
@@ -11,6 +12,10 @@ module PR
             app.config.paths["db/migrate"] << expanded_path
           end
         end
+      end
+      initializer :enable_affiliates do |app|
+        app.middleware.use Rack::Affiliates
+        app.middleware.use PR::Common::AffiliateRedirect
       end
     end
   end

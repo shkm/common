@@ -4,6 +4,7 @@ require 'pr/common/configuration'
 require 'pr/common/tokenable'
 require 'pr/common/shopifyable'
 require 'pr/common/token_authenticable'
+require 'pr/common/affiliate_redirect'
 
 module PR
   module Common

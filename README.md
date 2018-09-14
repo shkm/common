@@ -29,7 +29,9 @@ The development process is:
 * when you are finished with all of the work needed for common, create a pull request for it
 * when that pull request is approved and merged an admin of common will:
   * update lib/pr/common/version.rb file with current version
-  * tag a release on master with the version like ```git tag v0.2.0```
+  * run ```gem build pr-common.gemspec```
+  * commit and push to master
+  * tag this release on master with the version like ```git tag v0.2.0```
   * push this tag ```git push origin master --tags```
 * edit the project X Gemfile with ```gem 'pr-common', git: 'https://github.com/pemberton-rank/common.git', tag: 'v0.2.0'```
 * create a pull request for project X

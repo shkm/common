@@ -1,10 +1,11 @@
 PATH
   remote: .
   specs:
-    pr-common (0.1.11)
+    pr-common (0.3.1)
       active_model_serializers
       activeresource
       nokogiri (>= 1.8.2)
+      rack-affiliates
       rails
       shopify_app (~> 7.2.0)
 
@@ -137,6 +138,8 @@ GEM
       byebug (~> 10.0)
       pry (~> 0.10)
     rack (2.0.5)
+    rack-affiliates (0.4.0)
+      rack
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
     rails (5.2.1)
@@ -218,9 +221,10 @@ DEPENDENCIES
   factory_bot_rails
   pr-common!
   pry-byebug
+  rack-affiliates
   rspec-rails
   shopify_app (~> 7.2.0)
   sqlite3
 
 BUNDLED WITH
-   1.16.1
+   1.16.2

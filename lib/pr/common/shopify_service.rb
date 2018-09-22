@@ -30,7 +30,7 @@ module PR
                             }
                         })
         @user.update(active_charge: false)
-        @shop.update(uninstalled: true) #TODO: What happens on reinstall? Probably need to set that back to true if the same row is used
+        @shop.update(uninstalled: true)
       end
 
       def reconcile_with_shopify

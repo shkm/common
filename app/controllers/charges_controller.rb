@@ -41,10 +41,6 @@ class ChargesController < ApplicationController
   def activate_user
     @charge.activate
     @user.update(active_charge: true)
-    @user.application_charges.create({
-      amount_usd: @charge.price,
-      date_created: Date.today
-    })
     Analytics.track({
       user_id: @user.id,
       event: 'Charge Activated',

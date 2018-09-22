@@ -249,7 +249,7 @@ DEPENDENCIES
   pry-byebug
   rack-affiliates
   rspec-rails
-  shopify_app (~> 7.2.0)
+  shopify_app (= 7.2.11)
   sidekiq
   sqlite3
 

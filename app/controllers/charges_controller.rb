@@ -18,7 +18,6 @@ class ChargesController < ApplicationController
         redirect_to "#{Settings.client_url}/charge/failed"
       end
     else
-      # TODO: What do we do about analytics and this 'application_charges' table
       @user.update(active_charge: true)
       redirect_to "#{Settings.client_url}/charge/succeed"
     end
@@ -65,28 +64,16 @@ class ChargesController < ApplicationController
   end
 
   def charge_params(access_token)
-    shop = ShopifyAPI::Shop.current
-    plan_name = shop.plan_name
+    api_shop = ShopifyAPI::Shop.current
+    our_shop = Shop.find_by!(shopify_domain: api_shop.myshopify_domain)
 
-    best_price = determine_price(plan_name)
+    plan_name = api_shop.plan_name
+
+    shopify_service = PR::Common::ShopifyService.new(shop: our_shop)
+    best_price = shopify_service.determine_price(plan_name: plan_name)
 
     best_price[:test] = !Rails.env.production?
     best_price[:return_url] = "#{request.base_url}#{callback_charges_path}?access_token=#{access_token}"
-
-    return best_price
-  end
-
-  def determine_price(plan_name)
-    # List prices in ascending order in config
-    pricing = PR::Common.config.pricing
-
-    best_price = pricing.last
-
-    pricing.each do |price|
-      if price[:plan_name] == plan_name
-        best_price = price
-      end
-    end
 
     return best_price
   end

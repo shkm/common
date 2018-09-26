@@ -1,2 +1,2 @@
-class ApplicationJob < ActiveJob::Base
+class PR::Common::ApplicationJob < ActiveJob::Base
 end

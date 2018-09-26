@@ -1,4 +1,4 @@
-class ShopUpdateJob < ApplicationJob
+class ShopUpdateJob < PR::Common::ApplicationJob
   def perform(params)
     shop = Shop.find_by(shopify_domain: params[:shop_domain])
     shopify_service = PR::Common::ShopifyService.new(shop: shop)

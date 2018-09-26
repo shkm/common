@@ -6,8 +6,8 @@ module PR
         @user = User.shopify.find_by(shop_id: @shop.id)
       end
 
-      def update_shop(plan_name:, uninstalled: false)
-        if @shop[plan_name] != plan_name && @shop[plan_name] == 'affiliate'
+      def update_shop(plan_name:, uninstalled:)
+        if @shop.plan_name != plan_name && @shop.plan_name == 'affiliate'
           # development shop now on a paid plan
           @user.update(active_charge: false)
           Analytics.track({
@@ -37,7 +37,7 @@ module PR
         ShopifyAPI::Session.temp(@shop.shopify_domain, @shop.shopify_token) do
           begin
             shopify_shop = ShopifyAPI::Shop.current
-            update_shop(plan_name: shopify_shop[:plan_name])
+            update_shop(plan_name: shopify_shop[:plan_name], uninstalled: false)
           rescue ActiveResource::UnauthorizedAccess => e
             # we no longer have access to the shop- app uninstalled
             set_uninstalled

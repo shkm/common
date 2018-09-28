@@ -14,7 +14,8 @@ module PR
                               user_id: @user.id,
                               event: 'Shop Handed off',
                               properties: {
-                                  planName: plan_name
+                                  planName: plan_name,
+                                  email: @user.email
                               }
                           })
         end
@@ -26,7 +27,8 @@ module PR
                             user_id: @user.id,
                             event: 'Uninstalled Shopify app',
                             properties: {
-                                activeCharge: @user.has_active_charge?
+                                activeCharge: @user.has_active_charge?,
+                                email: @user.email
                             }
                         })
         @user.update(active_charge: false)

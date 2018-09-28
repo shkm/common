@@ -1,4 +1,5 @@
 require 'rack-affiliates'
+require 'sidekiq'
 module PR
   module Common
     class Engine < ::Rails::Engine
@@ -16,6 +17,11 @@ module PR
       initializer :enable_affiliates do |app|
         app.middleware.use Rack::Affiliates
         app.middleware.use PR::Common::AffiliateRedirect
+      end
+      initializer :configure_active_job do |app|
+        if app.config.active_job.queue_adapter != :sidekiq
+          raise 'Ensure you have config.active_job.queue_adapter = :sidekiq in your application.rb'
+        end
       end
     end
   end

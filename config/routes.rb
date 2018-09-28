@@ -1,5 +1,8 @@
+require 'sidekiq/web'
 Rails.application.routes.draw do
   devise_for :users, only: []
+
+  mount Sidekiq::Web => '/sidekiq'
 
   resources :sessions, only: :create
   resources :signups,  only: :create
@@ -10,4 +13,10 @@ Rails.application.routes.draw do
   post 'user_admin/refunds', to: 'user_admin#make_refund'
 
   post 'shops/callback'
+
+  resources :charges,      only: [:create] do
+    collection do
+      get :callback
+    end
+  end
 end

@@ -42,7 +42,8 @@ module PR
                               user_id: created_user.id,
                               event: 'Registered',
                               properties: {
-                                  'registration method': 'shopify'
+                                  'registration method': 'shopify',
+                                  'email': email
                               }
                           })
 

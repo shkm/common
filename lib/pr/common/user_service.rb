@@ -16,7 +16,7 @@ module PR
 
           return user
         else
-          created_user = create(
+          created_user = User.create(
               username: "shopify-#{shop.shopify_domain}",
               password: SecureRandom.hex,
               provider: 'shopify',

@@ -1,4 +1,4 @@
-class DropApplicationCharges < ActiveRecord::Migration
+class DropApplicationCharges < ActiveRecord::Migration[5.0]
   def change
     drop_table :application_charges
   end

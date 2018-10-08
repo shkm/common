@@ -1,5 +1,6 @@
-class User < ActiveRecord::Base
+class User < ApplicationRecord
   include PR::Common::Tokenable
+  include PR::Common::Models::User
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable

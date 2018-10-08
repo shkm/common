@@ -1,4 +1,5 @@
-class Shop < ActiveRecord::Base
-  include PR::Common::Shopifyable
+class Shop < ApplicationRecord
+  include PR::Common::Models::Shop
+
   has_one :user
 end

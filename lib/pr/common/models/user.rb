@@ -7,7 +7,10 @@ module PR
       # So please include PR::Common::Models::User
       module User
         extend ActiveSupport::Concern
+
         included do
+          enum provider: { shopify: 0, tictail: 1 }
+
           [:has_active_charge?, :active_charge?].each do |name|
             send(:define_method, name, -> { self.active_charge })
           end

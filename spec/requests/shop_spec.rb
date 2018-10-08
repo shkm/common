@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'Shop', type: :request do
   describe 'POST shops/callback' do
-    let!(:shop) { create(:shop, plan_name: nil, shopify_domain: 'pluginbackup-dev.myshopify.com') }
+    let!(:shop) { create(:shop, plan_name: 'trial', shopify_domain: 'pluginbackup-dev.myshopify.com') }
 
     let(:url) { '/shops/callback' }
     let(:params) do

@@ -1,10 +1,16 @@
+require 'shopify_app/shop'
+require 'shopify_app/session_storage'
 module PR
   module Common
     module Models
       module Shop
         extend ActiveSupport::Concern
+
+        include ::ShopifyApp::Shop
+        include ::ShopifyApp::SessionStorage
+
         included do
-          scope :with_active_plan, -> { where.not(shops: { plan_name: 'cancelled' }) }
+          scope :with_active_plan, -> { where.not(plan_name: 'cancelled') }
           scope :with_active_charge, -> { joins(:user).where(users: { active_charge: true }) }
           scope :installed, -> { where(uninstalled: false) }
         end

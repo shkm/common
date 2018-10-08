@@ -21,6 +21,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'nokogiri', '>= 1.8.2'
   s.add_dependency 'activeresource'
   s.add_dependency 'rack-affiliates'
+  s.add_dependency 'config'
 
   s.add_development_dependency 'rspec-rails'
 end

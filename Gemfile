@@ -15,3 +15,4 @@ end
 gem 'devise'
 gem 'rack-affiliates'
 gem 'sidekiq'
+gem 'config'

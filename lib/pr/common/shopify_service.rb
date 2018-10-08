@@ -39,7 +39,7 @@ module PR
         ShopifyAPI::Session.temp(@shop.shopify_domain, @shop.shopify_token) do
           begin
             shopify_shop = ShopifyAPI::Shop.current
-            update_shop(plan_name: shopify_shop[:plan_name], uninstalled: false)
+            update_shop(plan_name: shopify_shop.plan_name, uninstalled: false)
           rescue ActiveResource::UnauthorizedAccess => e
             # we no longer have access to the shop- app uninstalled
             set_uninstalled

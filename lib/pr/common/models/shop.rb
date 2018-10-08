@@ -9,13 +9,12 @@ module PR
         include ::ShopifyApp::Shop
         include ::ShopifyApp::SessionStorage
 
-
         included do
           scope :with_active_plan, -> { where.not(plan_name: 'cancelled') }
           scope :with_active_charge, -> { joins(:user).where(users: { active_charge: true }) }
           scope :installed, -> { where(uninstalled: false) }
         end
-      
+
         class_methods do
           # add class methods here
         end

@@ -9,9 +9,29 @@ describe PR::Common::ShopifyService do
       before { shop.update!(plan_name: 'affiliate') }
 
       it 'returns the defined price' do
-        expected_price = PR::Common.config.pricing.detect do |pricing_plan|
-          pricing_plan[:plan_name] == 'affiliate'
-        end
+        expected_price = {
+          price:      0,
+          trial_days: 0,
+          plan_name:  'affiliate',
+          name:       'Affiliate',
+          terms:      'Affiliate terms',
+        }
+
+        expect(service.determine_price).to eq expected_price
+      end
+    end
+
+    context 'shop has no plan whose pricing is defined' do
+      before { shop.update!(plan_name: 'foobar') }
+
+      it 'returns the pricing plan without a plan name' do
+
+        expected_price = {
+          price:      10.0,
+          trial_days: 7,
+          name:       'Generic with trial',
+          terms:      'Generic terms',
+        }
 
         expect(service.determine_price).to eq expected_price
       end

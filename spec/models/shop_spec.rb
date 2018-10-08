@@ -22,4 +22,15 @@ RSpec.describe Shop, type: :model do
       expect(shops).not_to include cancelled_plan_shop
     end
   end
+
+  describe '.installed' do
+    it 'includes only shows which are not uninstalled' do
+      installed_shop = create(:shop, uninstalled: false)
+      uninstalled_shop = create(:shop, uninstalled: true)
+
+      shops = Shop.installed
+      expect(shops).to include installed_shop
+      expect(shops).not_to include uninstalled_shop
+    end
+  end
 end

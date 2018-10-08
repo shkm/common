@@ -23,7 +23,7 @@ PR::Common.configure do |config|
       price:      10.0,
       trial_days: 7,
       name:       'Generic with trial',
-      terms:      'Generic germs',
+      terms:      'Generic terms',
     }
   ]
 end

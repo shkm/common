@@ -7,7 +7,9 @@ module PR
       # So please include PR::Common::Models::User
       module User
         def self.included(base)
-
+          [:has_active_charge?, :active_charge?].each do |name|
+            send(:define_method, name, -> { self.active_charge })
+          end
         end
       end
     end

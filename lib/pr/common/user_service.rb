@@ -40,7 +40,7 @@ module PR
 
           Analytics.track({
                               user_id: created_user.id,
-                              event: 'Registered',
+                              event: 'App Installed',
                               properties: {
                                   'registration method': 'shopify',
                                   'email': email

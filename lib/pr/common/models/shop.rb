@@ -10,7 +10,7 @@ module PR
         include ::ShopifyApp::SessionStorage
 
         included do
-          scope :with_active_plan, -> { where.not(plan_name: 'cancelled') }
+          scope :with_active_plan, -> { where('"shops"."plan_name" NOT IN (\'cancelled\', \'frozen\')') }
           scope :with_active_charge, -> { joins(:user).where(users: { active_charge: true }) }
           scope :installed, -> { where(uninstalled: false) }
         end

@@ -29,10 +29,11 @@ module PR
       def set_uninstalled
         Analytics.track({
                             user_id: @user.id,
-                            event: 'Uninstalled Shopify app',
+                            event: 'App Uninstalled',
                             properties: {
                                 activeCharge: @user.has_active_charge?,
-                                email: @user.email
+                                email: @user.email,
+                                subscription_length: @user.subscription_length
                             }
                         })
         @user.update(active_charge: false)

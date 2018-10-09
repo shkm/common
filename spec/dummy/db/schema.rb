@@ -13,7 +13,7 @@
 ActiveRecord::Schema.define(version: 2018_10_09_084529) do
 
   create_table "shops", force: :cascade do |t|
-    t.string "plan_name"
+    t.string "plan_name", null: false
     t.string "shopify_domain"
     t.string "shopify_token", null: false
     t.boolean "uninstalled", default: false, null: false

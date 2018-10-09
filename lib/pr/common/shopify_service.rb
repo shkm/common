@@ -6,6 +6,10 @@ module PR
         @user = User.shopify.find_by(shop_id: @shop.id)
       end
 
+      def update_user(email:)
+        @user.update(email: email)
+      end
+
       def update_shop(plan_name:, uninstalled:)
         if @shop.plan_name != plan_name && @shop.plan_name == 'affiliate'
           # development shop now on a paid plan

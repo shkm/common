@@ -14,6 +14,10 @@ module PR
           [:has_active_charge?, :active_charge?].each do |name|
             send(:define_method, name, -> { self.active_charge })
           end
+
+          def subscription_length
+            (DateTime.now - self.charged_at.to_datetime).to_i if self.charged_at
+          end
         end
 
         class_methods do

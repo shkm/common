@@ -8,6 +8,7 @@ require 'pr/common/models/user'
 require 'pr/common/models/shop'
 require 'pr/common/user_service'
 require 'pr/common/shopify_service'
+require 'pr/common/webhook_service'
 
 module PR
   module Common

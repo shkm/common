@@ -2,6 +2,7 @@ require 'rails_helper'
 
 describe PR::Common::WebhookService do
   let(:shop) { create(:shop) }
+  let(:uninstalled_shop) { create(:shop, :uninstalled) }
   let(:existing_webhooks) do
     [
       OpenStruct.new(
@@ -22,6 +23,23 @@ describe PR::Common::WebhookService do
       address: "https://localhost:3000/webhooks/app_uninstalled",
       format: 'json'
     }]
+  end
+
+  describe '.recreate_webhooks!' do
+    it 'creates a new instance for installed shops only' do
+      service_shop = described_class.new(shop)
+
+      expect(described_class)
+        .to receive(:new)
+        .with(shop)
+        .and_return service_shop
+
+      expect(described_class)
+        .not_to receive(:new)
+        .with(uninstalled_shop)
+
+      described_class.recreate_webhooks!
+    end
   end
 
   subject(:service) { described_class.new(shop) }
@@ -51,6 +69,37 @@ describe PR::Common::WebhookService do
 
       service.recreate_webhooks!
     end
+
+    error_classes = [
+      ActiveResource::UnauthorizedAccess,
+      ActiveResource::ConnectionError,
+      Timeout::Error,
+      OpenSSL::SSL::SSLError,
+      Exception
+    ]
+
+    error_classes.each do |error_class|
+      context "when a #{error_class} occurs" do
+        let(:error) { error_class.new('fail') }
+
+        before do
+          allow(ShopifyAPI::Webhook).to receive(:all) { raise error }
+        end
+
+        it 'catches the error' do
+          expect{ service.recreate_webhooks! }.not_to raise_error
+        end
+
+        it 'logs an error' do
+          expect(Rails.logger).to receive(:error)
+
+          service.recreate_webhooks!
+        end
+
+        it 'returns false' do
+          expect(service.recreate_webhooks!).to eq false
+        end
+      end
+    end
   end
 end
-

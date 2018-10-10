@@ -1,6 +1,13 @@
 module PR
   module Common
     class WebhookService
+      # Recreates all webhooks and returns a list of any that failed
+      def self.recreate_webhooks!(shops = Shop.installed)
+        shops.find_each.map do |shop|
+          new(shop).recreate_webhooks! || shop.shopify_domain
+        end.compact
+      end
+
       def initialize(shop)
         @shop = shop
       end
@@ -48,20 +55,34 @@ module PR
       # notify.
       def wrap_errors
         yield
-      rescue ActiveResource::ConnectionError => e
-        # When a connection fails in some way, assume the shop was uninstalled.
+      rescue ActiveResource::UnauthorizedAccess => e
+        # This probably means the shop is no longer installed.
         Rails.logger.error "Failed to modify webhooks for #{@shop.shopify_domain}. "\
-          "Consider checking if it's still installed, and uninstalling if not. Error: "\
+          "Unauthorized: Consider checking if it's still installed, and uninstalling if not. Error: "\
           "#{e.message}"
+
+        false
+      rescue ActiveResource::ConnectionError => e
+        Rails.logger.error "Failed to modify webhooks for #{@shop.shopify_domain}. "\
+          "Some kind of connection error occurred. Error: "\
+          "#{e.message}"
+
+        false
       rescue Timeout::Error => e
         Rails.logger.error "Failed to modify webhooks for #{@shop.shopify_domain}. "\
           "Connection timed out. Error: #{e.message}"
+
+        false
       rescue OpenSSL::SSL::SSLError => e
         Rails.logger.error "Failed to modify webhooks for #{@shop.shopify_domain}. "\
           "SSLError. Error: #{e.message}"
+
+        false
       rescue Exception => e
         Rails.logger.error "Failed to modify webhooks for #{@shop.shopify_domain}. "\
           "This shouldn't have happened. Error: #{e.message}"
+
+        false
       end
     end
   end

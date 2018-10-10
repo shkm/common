@@ -6,7 +6,10 @@ namespace 'common' do
       Rails.logger = Logger.new Rails.root.join('tmp', 'common-webhooks-recreate.log')
 
       shops = if args[:shops_file].present?
-                Shop.where(shopify_domain: File.read(args[:shops_file]).map(&:strip))
+                Shop.where( shopify_domain: File
+                                            .read(args[:shops_file])
+                                            .split('\s')
+                                            .map(&:strip))
               else
                 Shop.installed
               end

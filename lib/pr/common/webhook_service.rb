@@ -5,7 +5,7 @@ module PR
       def self.recreate_webhooks!(shops = Shop.installed)
         shops.find_each.map do |shop|
           new(shop).recreate_webhooks! || shop.shopify_domain
-        end.compact
+        end.reject { |item| item == true }
       end
 
       def initialize(shop)
@@ -27,6 +27,8 @@ module PR
             install_from_config
 
             destroy(existing_webhooks)
+
+            true
           end
         end
       end
@@ -61,28 +63,28 @@ module PR
           "Unauthorized: Consider checking if it's still installed, and uninstalling if not. Error: "\
           "#{e.message}"
 
-        false
+        return false
       rescue ActiveResource::ConnectionError => e
         Rails.logger.error "Failed to modify webhooks for #{@shop.shopify_domain}. "\
           "Some kind of connection error occurred. Error: "\
           "#{e.message}"
 
-        false
+        return false
       rescue Timeout::Error => e
         Rails.logger.error "Failed to modify webhooks for #{@shop.shopify_domain}. "\
           "Connection timed out. Error: #{e.message}"
 
-        false
+        return false
       rescue OpenSSL::SSL::SSLError => e
         Rails.logger.error "Failed to modify webhooks for #{@shop.shopify_domain}. "\
           "SSLError. Error: #{e.message}"
 
-        false
+        return false
       rescue Exception => e
         Rails.logger.error "Failed to modify webhooks for #{@shop.shopify_domain}. "\
           "This shouldn't have happened. Error: #{e.message}"
 
-        false
+        return false
       end
     end
   end

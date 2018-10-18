@@ -10,6 +10,7 @@ group :development, :test do
   gem 'factory_bot_rails'
   gem 'pry-byebug', group: [:development, :test]
   gem 'capistrano-sidekiq'
+  gem 'simplecov', require: false
 end
 
 gem 'devise'

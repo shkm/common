@@ -5,6 +5,14 @@ module PR::Common::Redactable
 
   class_methods do
     attr_reader :redactables
+    attr_reader :after_redaction_actions
+
+    # Accepts a proc or symbol detailing what to do after redaction
+    def after_redaction(method_name_or_proc)
+      @after_redaction_actions ||= []
+
+      @after_redaction_actions << method_name_or_proc
+    end
 
     def redactable(attribute, redactor, options = {})
       @redactables ||= []
@@ -41,5 +49,9 @@ module PR::Common::Redactable
     ]
 
     update!(new_attributes)
+
+    self.class.after_redaction_actions.each do |redaction_action|
+      redaction_action.respond_to?(:call) ? redaction_action.call : send(redaction_action)
+    end
   end
 end

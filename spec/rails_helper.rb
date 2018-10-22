@@ -6,6 +6,7 @@ abort("The Rails environment is running in production mode!") if Rails.env.produ
 require 'spec_helper'
 require 'rspec/rails'
 require 'support/factory_bot'
+require 'support/helpers/webhook_helper'
 
 # Add additional requires below this line. Rails is not loaded until this point!
 
@@ -30,6 +31,7 @@ ActiveRecord::Migration.maintain_test_schema!
 
 RSpec.configure do |config|
   config.include Devise::TestHelpers, type: :controller
+  config.include WebhookHelper, type: :request
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
